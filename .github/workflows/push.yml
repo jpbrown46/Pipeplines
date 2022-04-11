@@ -29,6 +29,12 @@ jobs:
       
     - name: Setup VSTest.exe 
       uses: Malcolmnixon/Setup-VSTest@v4 
+      
+    - name: DownloadBinaries
+      uses: actions/download-artifact@v3
+      with:
+        name: my-artifact
+        path: x64\Release
   
     - name: RunTests 
       working-directory: ${{env.GITHUB_WORKSPACE}} 
@@ -46,6 +52,13 @@ jobs:
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+      
+    - name: UploadBinaries
+      uses: actions/upload-artifact@v3
+      with:
+        name: my-artifact
+        path: x64\Release\
+        if-no-files-found: error
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
