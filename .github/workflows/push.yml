@@ -22,6 +22,7 @@ jobs:
 
   lint: 
     runs-on: windows-latest 
+    
     steps: 
     - name: RunLint
       working-directory: ${{env.GITHUB_WORKSPACE}} 
@@ -39,8 +40,6 @@ jobs:
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
-      
-
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -56,6 +55,10 @@ jobs:
         if-no-files-found: error
   
   test:  
+    needs: [build, lint]
+    runs-on: windows-latest
+    
+    steps:
     - name: Setup VSTest.exe 
       uses: Malcolmnixon/Setup-VSTest@v4 
       
